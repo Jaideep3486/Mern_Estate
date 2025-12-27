@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';
 // Importing necessary libraries and route files
+import authRouter from './routes/auth.route.js';
 
 // Importing necessary libraries
 dotenv.config();
@@ -25,6 +26,9 @@ mongoose
 const app = express();
 // Initializing Express application
 
+app.use(express.json());
+// Middleware to parse JSON request bodies , this app can now accept json data in req body
+
 app.listen(3000, () => {
   // Starting the server on port 3000
   console.log('API server is running on http://localhost:3000!');
@@ -42,3 +46,5 @@ app.listen(3000, () => {
 
 app.use('/api/users', await userRouter);
 // Using the user routes for handling requests to /api/users
+
+app.use('/api/auth', authRouter);
