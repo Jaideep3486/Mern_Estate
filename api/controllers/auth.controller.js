@@ -1,7 +1,8 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
+import { errorHandler } from '../utils/error.js';
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   //console.log(req.body);
   const { username, email, password } = req.body;
   // Extracting username, email, and password from the request body
@@ -23,7 +24,11 @@ export const signup = async (req, res) => {
       // Sending a success response with the created user data
     })
     .catch((err) => {
-      res.status(500).json({ message: 'Error registering user', error: err });
+      //res.status(500).json({ message: 'Error registering user', error: err });
       // Handling errors and sending an error response
+
+      next(err);
+
+      //  next(errorHandler(550, 'Custom Error: User registration failed'));
     });
 };

@@ -48,3 +48,15 @@ app.use('/api/users', await userRouter);
 // Using the user routes for handling requests to /api/users
 
 app.use('/api/auth', authRouter);
+
+app.use((err, req, res, next) => {
+  // Error-handling middleware
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  return res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+  // Sending a JSON response with the error message and status code
+});
