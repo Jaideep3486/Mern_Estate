@@ -1,6 +1,7 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import { errorHandler } from '../utils/error.js';
+import jwt from 'jsonwebtoken';
 
 export const signup = async (req, res, next) => {
   //console.log(req.body);
@@ -31,4 +32,28 @@ export const signup = async (req, res, next) => {
 
       //  next(errorHandler(550, 'Custom Error: User registration failed'));
     });
+};
+
+export const signin = async (req, res, next) => {
+  // Signin logic to be implemented
+
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return next(errorHandler(404, 'User not found'));
+    }
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+    if (!isPasswordValid) {
+      return next(errorHandler(401, 'wrong credentials'));
+    }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+    const { password: pass, ...userInfo } = user._doc;
+    res.cookie('access_token', token, { httpOnly: true });
+    res.status(200).json({ message: 'Signin successful', userInfo });
+  } catch (error) {
+    next(error);
+  }
 };
