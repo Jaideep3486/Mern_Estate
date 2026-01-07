@@ -52,7 +52,8 @@ export const signin = async (req, res, next) => {
     });
     const { password: pass, ...userInfo } = user._doc;
     res.cookie('access_token', token, { httpOnly: true });
-    res.status(200).json({ message: 'Signin successful', userInfo });
+    // res.status(200).json({ message: 'Signin successful', userInfo });
+    res.status(200).json(userInfo);
   } catch (error) {
     next(error);
   }
