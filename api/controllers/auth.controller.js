@@ -58,3 +58,39 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const google = async (req, res, next) => {
+  const { email, name, photoURL, uid } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (user) {
+      // User exists, proceed to generate token
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+      });
+      res.cookie('access_token', token, { httpOnly: true });
+      const { password, ...userInfo } = user._doc;
+      return res.status(200).json(userInfo);
+    } else {
+      // User does not exist, create a new user
+      const generatedPassword = bcrypt.hashSync(uid, 10);
+      const newUser = new User({
+        username:
+          name.split(' ').join('').toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email,
+        password: generatedPassword, // Using generated password for Google sign-in users
+        avatar: photoURL,
+      });
+      user = await newUser.save();
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: '1h',
+      });
+      res.cookie('access_token', token, { httpOnly: true });
+      const { password, ...userInfo } = user._doc;
+      return res.status(201).json(userInfo);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
