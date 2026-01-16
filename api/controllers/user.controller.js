@@ -9,21 +9,18 @@ export const test = (req, res) => {
 // Controller function to handle test requests and send a JSON response
 
 export const updateUser = async (req, res, next) => {
-  // Function to update user details
-  if (req.user.id !== req.params.id) {
-    return next(errorHandler(403, 'You are not allowed to update this user!'));
-  }
-  // If the user ID in the token doesn't match the ID in the URL, return an error
-  // Proceed with updating user details
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, 'You can only update your own account!'));
   try {
     if (req.body.password) {
-      req.body.password = bcrypt.hashSync(req.body.password, 10);
+      req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
+
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       {
         $set: {
-          usnername: req.body.username,
+          username: req.body.username,
           email: req.body.email,
           password: req.body.password,
           avatar: req.body.avatar,
@@ -31,11 +28,11 @@ export const updateUser = async (req, res, next) => {
       },
       { new: true }
     );
-    const { password, ...otherDetails } = updatedUser._doc;
-    res.status(200).json(otherDetails);
-    // Sending the updated user details as a JSON response
-  } catch (err) {
-    next(err);
-    // Passing any errors to the error handling middleware
+
+    const { password, ...rest } = updatedUser._doc;
+
+    res.status(200).json(rest);
+  } catch (error) {
+    next(error);
   }
 };

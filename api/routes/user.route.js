@@ -17,7 +17,7 @@ router.get('/test', test);
 // Defining a GET route for /test that uses the test controller function
 
 router.post('/update/:id', verifyToken, updateUser);
-// Defining a POST route for /update/:id that uses the updateUser controller function
+// Defining a PUT route for /update/:id that uses the updateUser controller function
 
 export default router;
 // Exporting the router to be used in other parts of the application
