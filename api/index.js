@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import userRouter from './routes/user.route.js';
 // Importing necessary libraries and route files
 import authRouter from './routes/auth.route.js';
+import cookieParser from 'cookie-parser';
 
 // Importing necessary libraries
 dotenv.config();
@@ -29,6 +30,9 @@ const app = express();
 app.use(express.json());
 // Middleware to parse JSON request bodies , this app can now accept json data in req body
 
+app.use(cookieParser());
+// Middleware to parse cookies from incoming requests
+
 app.listen(3000, () => {
   // Starting the server on port 3000
   console.log('API server is running on http://localhost:3000!');
@@ -44,7 +48,7 @@ app.listen(3000, () => {
 // Req is the data that comes from the client
 // Res is the data that we send back to the client
 
-app.use('/api/users', await userRouter);
+app.use('/api/user', await userRouter);
 // Using the user routes for handling requests to /api/users
 
 app.use('/api/auth', authRouter);

@@ -1,5 +1,6 @@
 import express from 'express';
-import { test } from '../controllers/user.controller.js';
+import { test, updateUser } from '../controllers/user.controller.js';
+import { verifyToken } from '../utils/verifyUser.js';
 
 const router = express.Router();
 
@@ -14,6 +15,9 @@ const router = express.Router();
 
 router.get('/test', test);
 // Defining a GET route for /test that uses the test controller function
+
+router.post('/update/:id', verifyToken, updateUser);
+// Defining a POST route for /update/:id that uses the updateUser controller function
 
 export default router;
 // Exporting the router to be used in other parts of the application
