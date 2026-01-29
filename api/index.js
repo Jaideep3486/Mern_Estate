@@ -5,6 +5,7 @@ import userRouter from './routes/user.route.js';
 // Importing necessary libraries and route files
 import authRouter from './routes/auth.route.js';
 import cookieParser from 'cookie-parser';
+import listingRouter from './routes/listing.route.js';
 
 // Importing necessary libraries
 dotenv.config();
@@ -52,6 +53,8 @@ app.use('/api/user', await userRouter);
 // Using the user routes for handling requests to /api/users
 
 app.use('/api/auth', authRouter);
+
+app.use('/api/listing', listingRouter);
 
 app.use((err, req, res, next) => {
   // Error-handling middleware
