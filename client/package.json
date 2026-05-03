@@ -21,6 +21,7 @@
     "react-router-dom": "^7.10.1",
     "redux-persist": "^6.0.0",
     "supabase-js": "^1.0.4",
+    "swiper": "^12.1.4",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
