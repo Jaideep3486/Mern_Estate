@@ -4,6 +4,7 @@ import {
   test,
   updateUser,
   getUserListings,
+  getUser,
 } from '../controllers/user.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
 
@@ -28,6 +29,8 @@ router.delete('/delete/:id', verifyToken, deleteUser);
 // Defining a DELETE route for /delete/:id that uses the deleteUser controller function
 
 router.get('/listings/:id', verifyToken, getUserListings);
+
+router.get('/:id', verifyToken, getUser);
 
 export default router;
 // Exporting the router to be used in other parts of the application
